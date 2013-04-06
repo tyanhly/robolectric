@@ -18,7 +18,6 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import org.fest.reflect.core.Reflection;
 import org.robolectric.Robolectric;
-import org.robolectric.bytecode.RobolectricInternals;
 import org.robolectric.internal.Implementation;
 import org.robolectric.internal.Implements;
 import org.robolectric.internal.RealObject;
@@ -50,7 +49,6 @@ public class ShadowView {
     @RealObject
     protected View realView;
 
-    private int id;
     ShadowView parent;
     protected Context context;
     private boolean selected;
@@ -105,34 +103,18 @@ public class ShadowView {
     private int hapticFeedbackPerformed = -1;
     private boolean onLayoutWasCalled;
 
-    public void __constructor__(Context context) {
-        getConstructor(View.class, realView, Context.class)
-                .invoke(context);
-
-        __constructor__(context, null);
-    }
-
-    public void __constructor__(Context context, AttributeSet attributeSet) {
-        getConstructor(View.class, realView, Context.class, AttributeSet.class)
-                .invoke(context, attributeSet);
-
-        __constructor__(context, attributeSet, 0);
-    }
-
     public void __constructor__(Context context, AttributeSet attributeSet, int defStyle) {
         if (context == null) throw new NullPointerException("no context");
-
-        getConstructor(View.class, realView, Context.class, AttributeSet.class, int.class)
-                .invoke(context, attributeSet, defStyle);
 
         this.context = context;
         this.attributeSet = attributeSet;
 
+        getConstructor(View.class, realView, Context.class, AttributeSet.class, int.class)
+                .invoke(context, attributeSet, defStyle);
+
         if (attributeSet != null) {
             applyAttributes();
         }
-
-        RobolectricInternals.getConstructor(View.class, realView, Context.class).invoke(context);
     }
 
     public void applyAttributes() {
@@ -146,12 +128,6 @@ public class ShadowView {
 
         // todo test
         applyAlphaAttribute();
-    }
-
-    @Implementation
-    public void setId(int id) {
-        this.id = id;
-        directlyOn(realView, View.class).setId(id);
     }
 
     @Implementation
@@ -203,11 +179,6 @@ public class ShadowView {
     @Implementation
     public boolean isFocusable() {
         return focusable;
-    }
-
-    @Implementation
-    public int getId() {
-        return id;
     }
 
     @Implementation
@@ -706,8 +677,8 @@ public class ShadowView {
     }
 
     protected void dumpAttributes(PrintStream out) {
-        if (id > 0) {
-            dumpAttribute(out, "id", shadowOf(context).getResourceLoader().getNameForId(id));
+        if (realView.getId() > 0) {
+            dumpAttribute(out, "id", shadowOf(context).getResourceLoader().getNameForId(realView.getId()));
         }
 
         switch (realView.getVisibility()) {
@@ -897,8 +868,8 @@ public class ShadowView {
 
     private void applyIdAttribute() {
         Integer id = attributeSet.getAttributeResourceValue("android", "id", 0);
-        if (getId() == 0) {
-            setId(id);
+        if (realView.getId() == 0) {
+            realView.setId(id);
         }
     }
 
@@ -949,7 +920,7 @@ public class ShadowView {
                     mHandler = getContext().getClass().getMethod(handlerName,
                             View.class);
                 } catch (NoSuchMethodException e) {
-                    int id = getId();
+                    int id = realView.getId();
                     String idText = id == View.NO_ID ? "" : " with id '"
                             + shadowOf(context).getResourceLoader()
                             .getNameForId(id) + "'";

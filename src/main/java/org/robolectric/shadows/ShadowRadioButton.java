@@ -22,7 +22,7 @@ public class ShadowRadioButton extends ShadowCompoundButton {
             checked state it's child RadioButtons. Feel free to implement properly.
          */
         if (viewParent instanceof RadioGroup) {
-            ((RadioGroup) viewParent).check(getId());
+            ((RadioGroup) viewParent).check(realView.getId());
         }
     }
 }
