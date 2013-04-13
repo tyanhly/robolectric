@@ -3,6 +3,7 @@ package org.robolectric.res;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -254,7 +255,9 @@ public class LayoutLoaderTest {
     @Test
     public void testImageViewSrcIsSet() throws Exception {
         View mediaView = inflate("main");
-        assertThat(((ShadowImageView) shadowOf(mediaView.findViewById(R.id.image))).getResourceId()).isEqualTo(R.drawable.an_image);
+        ImageView imageView = (ImageView) mediaView.findViewById(R.id.image);
+        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+        assertThat(shadowOf(drawable.getBitmap()).getLoadedFromResourceId()).isEqualTo(R.drawable.an_image);
     }
 
     @Test
@@ -422,7 +425,9 @@ public class LayoutLoaderTest {
     }
 
     private Drawable drawable(int id) {
-        return context.getResources().getDrawable(id);
+        Drawable drawable = context.getResources().getDrawable(id);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        return drawable;
     }
 
     public static class ClickActivity extends FragmentActivity {

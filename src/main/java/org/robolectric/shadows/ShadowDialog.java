@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import org.robolectric.Robolectric;
+import org.robolectric.internal.Implementation;
 import org.robolectric.internal.Implements;
 import org.robolectric.internal.RealObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.robolectric.Robolectric.directlyOn;
 import static org.robolectric.Robolectric.shadowOf;
 
 @SuppressWarnings({"UnusedDeclaration"})
@@ -99,10 +101,12 @@ public class ShadowDialog {
 //        cancel();
 //    }
 //
-//    @Implementation
-//    public void show() {
-//        setLatestDialog(this);
-//        shownDialogs.add(realDialog);
+    @Implementation
+    public void show() {
+        setLatestDialog(this);
+        shownDialogs.add(realDialog);
+        directlyOn(realDialog, Dialog.class).show();
+    }
 //        isShowing = true;
 //        try {
 //            if (!hasShownBefore) {

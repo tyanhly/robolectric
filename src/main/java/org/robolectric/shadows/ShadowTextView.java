@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.robolectric.Robolectric.directlyOn;
-import static org.robolectric.Robolectric.shadowOf_;
 
 @SuppressWarnings({"UnusedDeclaration"})
 @Implements(value = TextView.class)
@@ -408,18 +407,6 @@ public class ShadowTextView extends ShadowView {
 //    public CharSequence getError() {
 //        return errorText;
 //    }
-
-    @Override
-    @Implementation
-    public boolean equals(Object o) {
-        return super.equals(shadowOf_(o));
-    }
-
-    @Override
-    @Implementation
-    public int hashCode() {
-        return super.hashCode();
-    }
 
 //    public CompoundDrawables getCompoundDrawablesImpl() {
 //        return compoundDrawablesImpl;

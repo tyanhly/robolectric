@@ -153,8 +153,6 @@ public class ShadowBitmapDrawable extends ShadowDrawable {
     @Override
     @Implementation
     public String toString() {
-        return "ShadowBitmapDrawable{" +
-                "bitmap=" + bitmap +
-                '}';
+        return "BitmapDrawable{bitmap=" + bitmap + '}';
     }
 }

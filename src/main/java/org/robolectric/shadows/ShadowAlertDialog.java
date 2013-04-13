@@ -92,10 +92,10 @@ public class ShadowAlertDialog extends ShadowDialog {
         return custom;
     }
 
-    @Implementation
-    public void setView(View view) {
-        this.view = view;
-    }
+//    @Implementation
+//    public void setView(View view) {
+//        this.view = view;
+//    }
 
     /**
      * Resets the tracking of the most recently created {@code AlertDialog}
